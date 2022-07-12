@@ -378,8 +378,8 @@ namespace Obloq_http {
     //% weight=92 group="03_ThingSpeak"
     //% blockId=saveToThingSpeak blockGap=5
     //% expandableArgumentMode"toggle" inlineInputMode=inline
-    //% block="send data to ThingSpeak :| write key: %myKey field1: %field1 || field2: %field2 field3: %field3 field4: %field4 field5: %field5 field6: %field6 field7: %field7 field8: %field8"
-    export function saveToThingSpeak(myKey: string, field1:number, field2?:number, field3?:number, field4?:number, field5?:number, field6?:number, field7?:number, field8?:number): void {
+    //% block="send data to ThingSpeak :| write key: %myKey fieldnumber: %fieldnumber field: %field"
+    export function saveToThingSpeak(myKey: string, fieldnumber:number, field:number): void {
         Obloq_serial_init()
         basic.showLeds(`
         . . . . .
@@ -389,15 +389,8 @@ namespace Obloq_http {
         . . . . .
         `)
         let returnCode=""
-        let myArr:number[]=[field1,field2,field3,field4,field5,field6,field7,field8]
         let myUrl = "http://api.thingspeak.com/update?api_key=" + myKey
-        for(let i=0;i<myArr.length;i++)
-        {
-            if (myArr[i]!=null)
-                myUrl+="&field"+(i+1)+"="+myArr[i]
-            else
-                break
-        }
+        myUrl+="&field"+fieldnumber+"="+field
         serial.readString()
         obloqWriteString("|3|1|" + myUrl + "|\r")
         for (let i = 0; i < 3; i++) {
